@@ -41,8 +41,9 @@ export default {
       const regex = new RegExp(this.seperator, 'g');
 
       if (this.seperator && regex.test(val)) {
-        this.tags = [...this.tags, ...(new Set(val.split(this.seperator)))];
-        this.textareaValue = ''
+        const valToAdd = new Set(val.split(this.seperator).map(t => t.trim()).filter(t => t));
+        this.tags = [...this.tags, ...valToAdd];
+        this.textareaValue = '';
       }
     },
     existingTagIndex(val) {
@@ -57,9 +58,10 @@ export default {
       event.preventDefault(); // prevent cursor to create a new line in textarea
 
       const tag = event.target.value.trim();
-      const existingTagIndex = this.tags.findIndex(t => t.toLowerCase() == tag.toLowerCase());
 
       if (!tag) return;
+
+      const existingTagIndex = this.tags.findIndex(t => t.toLowerCase() == tag.toLowerCase());
 
       if (existingTagIndex >= 0) {
         this.existingTagIndex = existingTagIndex;
@@ -69,9 +71,10 @@ export default {
       const regex = new RegExp(this.seperator, 'g');
 
       if (this.seperator && regex.test(tag)) {
-        this.tags = [...this.tags, ...(new Set(tag.split(this.seperator)))];
+        this.tags = [...this.tags, ...(new Set(tag.split(this.seperator).map(t => t.trim()).filter(t => t)))];
       } else this.tags.push(tag);
-      event.target.value = '';
+
+      this.textareaValue = '';
     },
     removeTag(tagIndex) {
       if (typeof tagIndex == 'number') {
@@ -104,6 +107,7 @@ export default {
       />
     </span>
 
+    <!-- eslint-disable -->
     <span v-if="$scopedSlots.tag">
       <slot v-for="(tag, index) in tags" name="tag" :content="tag" :index="index" :remove="removeTag" :exists="existingTagIndex == index"></slot>
     </span>
