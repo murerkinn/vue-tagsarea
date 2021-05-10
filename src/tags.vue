@@ -27,6 +27,14 @@ export default {
     tags() {
       this.$emit('input', (this.value && Array.isArray(this.value)) ? this.tags : this.tags.join(this.seperator));
     },
+    textareaValue(val) {
+      const regex = new RegExp(this.seperator, 'g');
+
+      if (this.seperator && regex.test(val)) {
+        this.tags = [...this.tags, ...(new Set(val.split(this.seperator)))];
+        this.textareaValue = ''
+      }
+    }
   },
   methods: {
     addTag(event) {
