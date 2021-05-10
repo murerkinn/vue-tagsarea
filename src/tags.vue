@@ -70,12 +70,17 @@ export default {
       event.target.value = '';
     },
     removeTag(tagIndex) {
-      if (tagIndex) return this.tags.splice(tagIndex, 1);
+      if (typeof tagIndex == 'number') {
+        this.tags.splice(tagIndex, 1);
+        this.$refs.tagsarea.focus();
+        return;
+      }
 
       if (!this.textareaValue) this.tags.splice(this.tags.length - 1, 1);
     },
     removeAllTags() {
       this.tags = [];
+      this.$refs.tagsarea.focus();
     }
   },
   created() {
@@ -108,7 +113,7 @@ export default {
       @remove="removeTag(index)"
     />
 
-    <textarea v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" @keydown.enter.shift="(e) => e.preventDefault()" />
+    <textarea ref="tagsarea" v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" @keydown.enter.shift="(e) => e.preventDefault()" />
   </div>
 </template>
 
