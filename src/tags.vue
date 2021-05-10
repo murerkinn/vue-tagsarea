@@ -10,6 +10,7 @@ export default {
     return {
       tags: [],
       textareaValue: '',
+      existingTagIndex: -1,
     };
   },
   props: {
@@ -34,6 +35,12 @@ export default {
         this.tags = [...this.tags, ...(new Set(val.split(this.seperator)))];
         this.textareaValue = ''
       }
+    },
+    existingTagIndex(val) {
+      if (val != -1)
+        setTimeout(() => {
+          this.existingTagIndex = -1;
+        }, 600);
     }
   },
   methods: {
@@ -41,9 +48,14 @@ export default {
       event.preventDefault(); // prevent cursor to create a new line in textarea
 
       const tag = event.target.value.trim();
-      const existingTag = this.tags.find(t => t.toLowerCase() == tag.toLowerCase());
+      const existingTagIndex = this.tags.findIndex(t => t.toLowerCase() == tag.toLowerCase());
 
-      if (existingTag) return;
+      if (!tag) return;
+
+      if (existingTagIndex >= 0) {
+        this.existingTagIndex = existingTagIndex;
+        return;
+      }
 
       const regex = new RegExp(this.seperator, 'g');
 
@@ -67,7 +79,7 @@ export default {
 <template>
   <div class="tags-container">
     <span v-if="$scopedSlots.tag" v-for="(tag, index) in tags" :key="index">
-      <slot name="tag" :content="tag" :index="index" :remove="removeTag"></slot>
+      <slot name="tag" :content="tag" :index="index" :remove="removeTag" :exists="existingTagIndex == index"></slot>
     </span>
 
     <tag
@@ -75,6 +87,7 @@ export default {
       v-for="(tag, index) in tags"
       :key="index"
       :content="tag"
+      :exists="existingTagIndex == index"
       @remove="removeTag(index)"
     />
 
