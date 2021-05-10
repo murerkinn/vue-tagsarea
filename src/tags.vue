@@ -22,6 +22,11 @@ export default {
       type: String,
       required: false,
       default: '\n',
+    },
+    showRemoveAll: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   watch: {
@@ -68,6 +73,9 @@ export default {
       if (tagIndex) return this.tags.splice(tagIndex, 1);
 
       if (!this.textareaValue) this.tags.splice(this.tags.length - 1, 1);
+    },
+    removeAllTags() {
+      this.tags = [];
     }
   },
   created() {
@@ -78,6 +86,15 @@ export default {
 
 <template>
   <div class="tags-container">
+    <slot v-if="$scopedSlots.removeAllButton && tags.length > 1" name="removeAllButton" :removeAll="removeAllTags"></slot>
+
+    <tag
+      v-else-if="showRemoveAll && tags.length > 1"
+      style="cursor: pointer"
+      content="Remove all"
+      @click.native="removeAllTags"
+    />
+
     <span v-if="$scopedSlots.tag" v-for="(tag, index) in tags" :key="index">
       <slot name="tag" :content="tag" :index="index" :remove="removeTag" :exists="existingTagIndex == index"></slot>
     </span>
