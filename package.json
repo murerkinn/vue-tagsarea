@@ -1,0 +1,17 @@
+{
+  "name": "vue-tagsarea",
+  "version": "0.1.0",
+  "description": "Textarea component with tags for Vue.js",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/murerkinn/vue-tagsarea.git"
+  },
+  "keywords": ["vue", "tag", "tags", "component", "textarea", "input", "tagsarea"],
+  "author": "Murat Erkin Cicek <murerkinn@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/murerkinn/vue-tagsarea/issues"
+  },
+  "homepage": "https://github.com/murerkinn/vue-tagsarea#readme"
+}
