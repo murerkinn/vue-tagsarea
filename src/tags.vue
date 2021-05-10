@@ -70,7 +70,7 @@ export default {
       @remove="removeTag(index)"
     />
 
-    <textarea v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" />
+    <textarea v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" @keydown.enter.shift="(e) => e.preventDefault()" />
   </div>
 </template>
 
