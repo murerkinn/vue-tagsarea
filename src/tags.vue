@@ -12,6 +12,22 @@ export default {
       textareaValue: '',
     };
   },
+  props: {
+    value: {
+      type: [String, Array],
+      required: false,
+    },
+    seperator: {
+      type: String,
+      required: false,
+      default: '\n',
+    }
+  },
+  watch: {
+    tags() {
+      this.$emit('input', (this.value && Array.isArray(this.value)) ? this.tags : this.tags.join(this.seperator));
+    },
+  },
   methods: {
     addTag(event) {
       event.preventDefault(); // prevent cursor to create a new line in textarea
@@ -21,8 +37,11 @@ export default {
 
       if (existingTag) return;
 
-      this.tags.push(tag);
+      const regex = new RegExp(this.seperator, 'g');
 
+      if (this.seperator && regex.test(tag)) {
+        this.tags = [...this.tags, ...(new Set(tag.split(this.seperator)))];
+      } else this.tags.push(tag);
       event.target.value = '';
     },
     removeTag(tagIndex) {
@@ -30,6 +49,9 @@ export default {
 
       if (!this.textareaValue) this.tags.splice(this.tags.length - 1, 1);
     }
+  },
+  created() {
+    this.tags = (this.value && Array.isArray(this.value)) ? this.value : this.value.split(this.seperator).filter((t) => t);
   }
 }
 </script>
