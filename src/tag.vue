@@ -13,7 +13,7 @@ export default {
 <template>
   <span class="tag">
     <span class="content">{{ content }}</span>
-    <span class="close">&#10005;</span>
+    <span class="close" @click="$emit('remove')">&#10005;</span>
   </span>
 </template>
 

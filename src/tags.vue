@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       tags: [],
+      textareaValue: '',
     };
   },
   methods: {
@@ -24,14 +25,19 @@ export default {
 
       event.target.value = '';
     },
+    removeTag(tagIndex) {
+      if (tagIndex) return this.tags.splice(tagIndex, 1);
+
+      if (!this.textareaValue) this.tags.splice(this.tags.length - 1, 1);
+    }
   }
 }
 </script>
 
 <template>
   <div class="tags-container">
-    <tag v-for="(tag, index) in tags" :key="index" :content="tag" />
-    <textarea class="tag-input" @keydown.enter.exact="addTag" />
+    <tag v-for="(tag, index) in tags" :key="index" :content="tag" @remove="removeTag(index)" />
+    <textarea v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" />
   </div>
 </template>
 
