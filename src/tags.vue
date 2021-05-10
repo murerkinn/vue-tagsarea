@@ -27,7 +27,11 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
+    theme: {
+      type: String,
+      validator: (value) => ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'].indexOf(value.toLowerCase()) !== -1,
+    },
   },
   watch: {
     tags() {
@@ -100,8 +104,8 @@ export default {
       />
     </span>
 
-    <span v-if="$scopedSlots.tag" v-for="(tag, index) in tags" :key="index">
-      <slot name="tag" :content="tag" :index="index" :remove="removeTag" :exists="existingTagIndex == index"></slot>
+    <span v-if="$scopedSlots.tag">
+      <slot v-for="(tag, index) in tags" name="tag" :content="tag" :index="index" :remove="removeTag" :exists="existingTagIndex == index"></slot>
     </span>
 
     <tag
@@ -110,6 +114,7 @@ export default {
       :key="index"
       :content="tag"
       :exists="existingTagIndex == index"
+      :theme="theme"
       @remove="removeTag(index)"
     />
 
@@ -128,11 +133,14 @@ export default {
 .tags-container .tag-input {
   outline: none;
   border: none;
-  font-size: 16px;
+  font-size: 12px;
+  line-height: 22px;
   flex-grow: 1;
   resize: none;
   white-space: nowrap;
   overflow: hidden;
   width: 40px;
+  height: 24px;
+  font-weight: 500;
 }
 </style>
