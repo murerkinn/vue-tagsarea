@@ -36,7 +36,18 @@ export default {
 
 <template>
   <div class="tags-container">
-    <tag v-for="(tag, index) in tags" :key="index" :content="tag" @remove="removeTag(index)" />
+    <span v-if="$scopedSlots.tag" v-for="(tag, index) in tags" :key="index">
+      <slot name="tag" :content="tag" :index="index" :remove="removeTag"></slot>
+    </span>
+
+    <tag
+      v-else
+      v-for="(tag, index) in tags"
+      :key="index"
+      :content="tag"
+      @remove="removeTag(index)"
+    />
+
     <textarea v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" />
   </div>
 </template>
