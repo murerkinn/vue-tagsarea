@@ -10,7 +10,7 @@ export default {
     return {
       tags: [],
       textareaValue: '',
-      existingTagIndex: -1,
+      existingTags: [],
     };
   },
   props: {
@@ -42,44 +42,19 @@ export default {
     tags() {
       this.$emit('input', (this.value && Array.isArray(this.value)) ? this.tags : this.tags.join(this.seperator));
     },
-    textareaValue(val) {
-      const regex = new RegExp(this.seperator, 'g');
-
-      if (this.seperator && regex.test(val)) {
-        const valToAdd = new Set(val.split(this.seperator).map(t => t && t.trim()));
-        this.tags = [...this.tags, ...valToAdd];
-        this.textareaValue = '';
-      }
-    },
-    existingTagIndex(val) {
-      if (val != -1)
+    existingTags(tags) {
+      if (tags.length)
         setTimeout(() => {
-          this.existingTagIndex = -1;
+          this.existingTags = [];
         }, 600);
     }
   },
   methods: {
-    addTag(event) {
-      event.preventDefault(); // prevent cursor to create a new line in textarea
+    addTag(tag) {
+      if(this.tags.find(t => t.toLowerCase() == tag.toLowerCase())) return this.existingTags.push(tag)
 
-      const tag = event.target.value.trim();
-
-      if (!tag) return;
-
-      const existingTagIndex = this.tags.findIndex(t => t.toLowerCase() == tag.toLowerCase());
-
-      if (existingTagIndex >= 0) {
-        this.existingTagIndex = existingTagIndex;
-        return;
-      }
-
-      const regex = new RegExp(this.seperator, 'g');
-
-      if (this.seperator && regex.test(tag)) {
-        this.tags = [...this.tags, ...(new Set(tag.split(this.seperator).map(t => t && t.trim())))];
-      } else this.tags.push(tag);
-
-      this.textareaValue = '';
+      this.tags.push(tag)
+      this.textareaValue = ''
     },
     removeTag(tagIndex) {
       if (typeof tagIndex == 'number') {
@@ -93,6 +68,30 @@ export default {
     removeAllTags() {
       this.tags = [];
       this.$refs.tagsarea.focus();
+    },
+    addTagWithEvent(event) {
+      event.preventDefault(); // prevent cursor to create a new line in textarea
+
+      let data;
+
+      switch (event.type) {
+        case 'keydown':
+          data = event.target.value.trim()
+          break;
+       case 'paste':
+          data = event.clipboardData.getData('text/plain').trim();
+          break;
+      }
+
+      if (!data) return;
+
+      const regex = new RegExp(this.seperator, 'g');
+
+      if (this.seperator && regex.test(data)) {
+        let tags = [...(new Set(data.split(this.seperator).filter(t => t).map(t => t.trim())))];
+
+        tags.forEach(this.addTag)
+      } else this.addTag(data)
     }
   },
   created() {
@@ -114,7 +113,14 @@ export default {
 
     <!-- eslint-disable -->
     <span v-if="$scopedSlots.tag">
-      <slot v-for="(tag, index) in tags" name="tag" :content="tag" :index="index" :remove="removeTag" :exists="existingTagIndex == index"></slot>
+      <slot
+        v-for="(tag, index) in tags"
+        name="tag"
+        :content="tag"
+        :index="index"
+        :remove="removeTag"
+        :exists="existingTags.includes(tag)"
+      ></slot>
     </span>
 
     <tag
@@ -122,12 +128,21 @@ export default {
       v-for="(tag, index) in tags"
       :key="index"
       :content="tag"
-      :exists="existingTagIndex == index"
+      :exists="existingTags.includes(tag)"
       :theme="theme"
       @remove="removeTag(index)"
     />
 
-    <textarea ref="tagsarea" v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" @keydown.enter.shift="(e) => e.preventDefault()" :placeholder="!tags.length && placeholder" />
+    <textarea
+      ref="tagsarea"
+      v-model="textareaValue"
+      class="tag-input"
+      @keydown.enter.exact="addTagWithEvent"
+      @keydown.backspace="removeTag"
+      @keydown.enter.shift="e => e.preventDefault()"
+      @paste="addTagWithEvent"
+      :placeholder="!tags.length && placeholder"
+    />
   </div>
 </template>
 
