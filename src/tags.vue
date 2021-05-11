@@ -104,12 +104,9 @@ export default {
   <div class="tags-container">
     <slot v-if="$scopedSlots.removeAllButton && tags.length > 1" name="removeAllButton" :removeAll="removeAllTags"></slot>
 
-    <tag
-      v-else-if="showRemoveAll && tags.length > 1"
-      style="cursor: pointer"
-      content="Remove all"
-      @click.native="removeAllTags"
-    />
+    <span v-else-if="showRemoveAll && tags.length > 1" class="remove-all-button" @click="removeAllTags">
+      <span class="content">Remove All</span>
+    </span>
 
     <!-- eslint-disable -->
     <span v-if="$scopedSlots.tag">
@@ -166,5 +163,20 @@ export default {
   width: 40px;
   height: 24px;
   font-weight: 500;
+}
+
+.remove-all-button {
+  cursor: pointer;
+  padding: 0 7px;
+  margin: 0 4px 4px 0;
+  border: 1px solid #f5c2c7;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #842029;
+}
+.remove-all-button .content {
+  font-size: 12px;
+  line-height: 20px;
+  vertical-align: middle;
 }
 </style>
