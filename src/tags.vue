@@ -32,6 +32,11 @@ export default {
       type: String,
       validator: (value) => ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'].indexOf(value.toLowerCase()) !== -1,
     },
+    placeholder: {
+      type: String,
+      required: false,
+      default: 'Enter your tags here...'
+    }
   },
   watch: {
     tags() {
@@ -122,7 +127,7 @@ export default {
       @remove="removeTag(index)"
     />
 
-    <textarea ref="tagsarea" v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" @keydown.enter.shift="(e) => e.preventDefault()" />
+    <textarea ref="tagsarea" v-model="textareaValue" class="tag-input" @keydown.enter.exact="addTag" @keydown.backspace="removeTag" @keydown.enter.shift="(e) => e.preventDefault()" :placeholder="!tags.length && placeholder" />
   </div>
 </template>
 
