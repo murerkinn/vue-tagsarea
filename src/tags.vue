@@ -92,6 +92,15 @@ export default {
 
         tags.forEach(this.addTag)
       } else this.addTag(data)
+    },
+    updateTag(tagIndex, event) {
+      event.preventDefault();
+
+      if(tagIndex < 0) return;
+
+      this.tags.splice(tagIndex, 1, event.target.textContent);
+
+      this.$refs.tagsarea.focus();
     }
   },
   created() {
@@ -116,6 +125,7 @@ export default {
         :content="tag"
         :index="index"
         :remove="removeTag"
+        :update="updateTag.bind(null, index)"
         :exists="existingTags.includes(tag)"
       ></slot>
     </span>
@@ -128,6 +138,7 @@ export default {
       :exists="existingTags.includes(tag)"
       :theme="theme"
       @remove="removeTag(index)"
+      @update="updateTag(index, $event)"
     />
 
     <textarea
