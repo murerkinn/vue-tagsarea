@@ -22,7 +22,7 @@ export default {
 <template>
   <span class="tag" :class="{ 'danger': exists, [theme]: theme }">
     <!-- eslint-disable -->
-    <span class="content">{{ content }}</span>
+    <span class="content" contenteditable @keydown.enter.exact="(e) => $emit('update', e)">{{content}}</span>
     <span class="close" @click="$emit('remove')">&#10005;</span>
   </span>
 </template>
@@ -41,6 +41,7 @@ export default {
   line-height: 20px;
   margin-right: 4px;
   vertical-align: middle;
+  outline: none;
 }
 
 .tag .close {
