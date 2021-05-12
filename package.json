@@ -1,8 +1,8 @@
 {
   "name": "vue-tagsarea",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Textarea component with tags for Vue.js",
-  "main": "index.js",
+  "main": "src/tags.vue",
   "scripts": {
     "lint": "eslint src/*.vue"
   },
@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/murerkinn/vue-tagsarea.git"
   },
+  "files": [
+    "src"
+  ],
   "keywords": [
     "vue",
     "tag",
