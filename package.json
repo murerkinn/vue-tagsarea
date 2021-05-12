@@ -3,15 +3,34 @@
   "version": "0.1.0",
   "description": "Textarea component with tags for Vue.js",
   "main": "index.js",
+  "scripts": {
+    "lint": "eslint src/*.vue"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/murerkinn/vue-tagsarea.git"
   },
-  "keywords": ["vue", "tag", "tags", "component", "textarea", "input", "tagsarea"],
+  "keywords": [
+    "vue",
+    "tag",
+    "tags",
+    "component",
+    "textarea",
+    "input",
+    "tagsarea"
+  ],
   "author": "Murat Erkin Cicek <murerkinn@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/murerkinn/vue-tagsarea/issues"
   },
-  "homepage": "https://github.com/murerkinn/vue-tagsarea#readme"
+  "homepage": "https://github.com/murerkinn/vue-tagsarea#readme",
+  "devDependencies": {
+    "@vue/eslint-config-prettier": "6.0.0",
+    "babel-eslint": "10.1.0",
+    "eslint": "7.26.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-vue": "7.9.0",
+    "prettier": "2.3.0"
+  }
 }
