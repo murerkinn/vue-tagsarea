@@ -14,15 +14,14 @@ export default {
     exists: {
       type: Boolean,
       default: false,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <template>
-  <span class="tag" :class="{ 'danger': exists, [theme]: theme }">
-    <!-- eslint-disable -->
-    <span class="content" contenteditable @keydown.enter.exact="(e) => $emit('update', e)">{{content}}</span>
+  <span class="tag" :class="{ danger: exists, [theme]: theme }">
+    <span class="content" contenteditable @keydown.enter.exact="e => $emit('update', e)">{{ content }}</span>
     <span class="close" @click="$emit('remove')">&#10005;</span>
   </span>
 </template>
